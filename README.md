@@ -1,107 +1,81 @@
-# Wavelet — Complete Feature Reference (v2.0)
+<div align="center">
 
-![License](https://img.shields.io/badge/license-MIT-FFB224?style=flat-square)
-![Dependencies](https://img.shields.io/badge/dependencies-none-4ADE80?style=flat-square)
-![Build](https://img.shields.io/badge/build-none%20needed-9BA3FF?style=flat-square)
-![Hosting](https://img.shields.io/badge/hosting-GitHub%20Pages%20ready-FFB224?style=flat-square)
+<img src="assets/img/og-cover.png" alt="Wavelet Ultimate Reference" width="100%">
 
-A single-page technical reference for the **Wavelet** Android equalizer app — every
-control explained with the reasoning behind it, plus real, validated preset values for a
-**Redmi 12 built-in speaker** and a **KZ EDX Pro** wired earphone.
+# Wavelet · Complete Feature Reference
 
-This repository is the *presentation redesign* of the reference: hand-built HTML, CSS and
-JavaScript — zero frameworks, zero build step, zero trackers — designed like a mastering
-console and engineered to be read.
+**Signal, dissected.**  
+A mastering-console-grade technical reference for the Wavelet Android equalizer.
 
-> Independent reference — not affiliated with the Wavelet app or its developer.
+[![Live Demo](https://img.shields.io/badge/VIEW%20LIVE%20REFERENCE-wavelet_ultimate-38bdf8?style=for-the-badge&labelColor=0f172a)](https://nmstudioo.github.io/wavelet_ultimate/)
+![Platform](https://img.shields.io/badge/WAVELET%20%7C%20ANDROID-38bdf8?style=flat-square&labelColor=0f172a)
+![Format](https://img.shields.io/badge/VANILLA%20ES2020-64748b?style=flat-square&labelColor=0f172a)
+
+[Overview](#overview) · [Features](#features) · [Design](#design-system) · [Structure](#repository-structure)
+
+</div>
 
 ---
 
-## What's inside
+## Overview
 
-- **Two-theme design system** — "studio instrument panel" dark mode + warm paper light
-  mode, driven entirely by CSS custom properties (toggle persists, OS preference respected).
-- **Interactive frequency-response chart** — the Redmi 12 Graphic-EQ curve and the KZ
-  AutoEq-only flat line, drawn as a smooth Catmull-Rom SVG spline on a logarithmic
-  frequency axis, with a morphing device toggle.
-- **Organized navigation** — sticky table of contents with scroll-spy highlighting,
-  `/`-to-filter search, and a focus-trapped mobile drawer.
-- **Living data** — headroom meters and the cut-depth band chart animate on scroll;
-  stat counters count up; preset dumps copy to the clipboard in one click.
-- **Reading amenities** — gradient progress bar, back-to-top with a progress ring,
-  staggered section reveals, print stylesheet, reduced-motion support.
+This is not a user manual. It is an engineering reference that explains every control in the Wavelet app, the reasoning behind it, and real, validated preset values for the **Redmi 12 built-in speaker** and the **KZ EDX Pro** wired earphone.
 
-## Structure
+> [!IMPORTANT]
+> Independent reference. Not affiliated with the Wavelet app or its developer.
 
-```
+| Attribute | Value |
+|:--|:--|
+| **Format** | Hand-built HTML / CSS / JS |
+| **Charts** | Catmull-Rom SVG splines |
+| **Themes** | Studio dark + warm paper light |
+| **Build step** | None |
+
+---
+
+## Features
+
+- **Interactive frequency-response chart:** Redmi 12 Graphic-EQ curve and KZ AutoEq flat line drawn as smooth splines on a log axis with device toggle.
+- **Sticky table of contents:** Scrollspy highlighting, `/`-to-filter search, focus-trapped mobile drawer.
+- **Living data:** Headroom meters, cut-depth band charts, and stat counters that animate on scroll.
+- **One-click preset dumps:** Copy the exact biquad values to clipboard.
+
+---
+
+## Design System — "Studio Instrument Panel"
+
+Dark slate with cyan accents for data, warm paper for the light theme. The typography is clinical: a geometric sans for UI, a monospace for every number.
+
+| Role | Face |
+|:--|:--|
+| Display | **Space Grotesk** |
+| Body | **DM Sans** |
+| Data | **Geist Mono** |
+
+| Token | Dark | Light | Use |
+|:--|:--|:--|:--|
+| `--bg` | `#0f172a` | `#f8fafc` | Page background |
+| `--acc` | `#38bdf8` | `#0284c7` | Charts, active states |
+| `--mut` | `#94a3b8` | `#64748b` | Muted text |
+
+---
+
+## Repository Structure
+
+```text
 wavelet-reference/
-├── index.html              # the entire reference (content + structure)
+├── index.html          ← the entire reference
 ├── assets/
-│   ├── css/main.css        # design system: tokens → components → responsive → print
-│   ├── js/main.js          # 10 small modules, vanilla ES2020+
+│   ├── css/main.css    ← design tokens → components → responsive
+│   ├── js/main.js      ← 10 small modules, vanilla ES2020+
 │   └── img/favicon.svg
-├── .github/workflows/deploy.yml   # publishes to GitHub Pages on push to main
-├── .nojekyll               # skip Jekyll processing on GitHub Pages
-├── DESIGN.md               # design decisions, tokens, interaction inventory
-├── LICENSE                 # MIT
+├── .github/workflows/deploy.yml
+├── DESIGN.md           ← design decisions, tokens, interactions
 └── README.md
 ```
 
-## Run locally
+---
 
-Any static file server works:
-
-```bash
-# from the repo root — pick your favorite
-python3 -m http.server 8000
-# or
-npx serve .
-```
-
-Then open <http://localhost:8000>. (Opening `index.html` directly also works — all asset
-paths are relative so the page is deployable at any URL depth.)
-
-## Publish on GitHub Pages
-
-1. Create a new repository (e.g. `wavelet-reference`) and push this folder's contents
-   to `main`.
-2. **Repo → Settings → Pages → Build and deployment → Source: *GitHub Actions***.
-3. Push, or run the workflow manually (**Actions → Deploy to GitHub Pages → Run
-   workflow**). The included workflow uploads the site and deploys it.
-
-The site then lives at `https://<your-username>.github.io/wavelet-reference/`.
-
-Optional polish after publishing:
-
-- Uncomment `og:image` in `index.html` and replace `YOUR-USERNAME` so link previews
-  resolve (`assets/img/og-cover.png` is included — swap in your own screenshot if you
-  prefer).
-- Put your name in the `LICENSE` copyright line if you'd like.
-- Set **Settings → General → Description** so search results read well.
-
-## Customize
-
-- **Colors, fonts, spacing, motion** → edit the token block at the top of
-  `assets/css/main.css` (both themes live there). Derived tints recompute automatically
-  via `color-mix()`.
-- **Chart data** → `SERIES` / `BANDS` near the top of the `Chart` module in
-  `assets/js/main.js`.
-- **Content** → `index.html` is plain semantic HTML; sections follow one repeating
-  anatomy (header → prose → parameters → examples → device panels).
-
-## Design system
-
-See [DESIGN.md](DESIGN.md) for the full rationale: font pairing, type scale, palette
-with contrast notes, layout grid, iconography, data-graphic specs, the micro-interaction
-inventory, and accessibility/performance decisions.
-
-## Credits
-
-- **Wavelet** — the Android headphone equalizer app this reference documents.
-- **AutoEq** — the measurement database the KZ EDX Pro preset relies on.
-- Content, code and design in this repo: hand-written for portfolio purposes.
-
-## License
-
-MIT — see [LICENSE](LICENSE). The document text may additionally be treated as
-reference notes: credit is appreciated, lock-in is not intended.
+<div align="center">
+<sub>Designed &amp; tuned by <b>Noushad M.</b> · © 2026</sub>
+</div>
