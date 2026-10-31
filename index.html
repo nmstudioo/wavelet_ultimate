@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Wavelet — Complete Feature Reference (v2.0)</title>
+  <meta name="description" content="Complete Wavelet feature reference v2.0 — every control explained with the reasoning behind it, plus real preset values for Redmi 12 speaker and KZ EDX Pro earphones."/>
+  <meta name="color-scheme" content="dark light"/>
+  <meta name="theme-color" content="#07070a"/>
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg"/>
+
+  <!-- Social / Open Graph.
+       After publishing, uncomment og:image and replace YOUR-USERNAME with your
+       GitHub user name so link previews resolve (see README → Publish). -->
+  <meta property="og:type" content="article"/>
+  <meta property="og:site_name" content="Wavelet Reference"/>
+  <meta property="og:title" content="Wavelet — Complete Feature Reference (v2.0)"/>
+  <meta property="og:description" content="Every control in Wavelet — what it does, what each parameter means, and how it played out in two real presets: a Redmi 12 speaker and a KZ EDX Pro earphone."/>
+  <!-- <meta property="og:image" content="https://YOUR-USERNAME.github.io/wavelet-reference/assets/img/og-cover.png"/> -->
+  <meta name="twitter:card" content="summary"/>
+
+  <!-- Theme boot: runs before first paint so the saved theme never flashes. -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('wavelet-theme');
+        var theme = saved === 'light' || saved === 'dark'
+          ? saved
+          : (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.dataset.theme = theme;
+      } catch (e) {
+        document.documentElement.dataset.theme = 'dark';
+      }
+    })();
+  </script>
+
+  <!-- Typography: Fraunces (display) · Inter (text) · JetBrains Mono (data) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="assets/css/main.css"/>
+
+  <noscript>
+    <style>
+      /* Content-first fallback: everything is visible without JavaScript. */
+      .reveal { opacity: 1 !important; transform: none !important; }
+      .meter-fill { width: var(--w) !important; }
+      .bc-bar { height: calc(var(--v) * 7px) !important; }
+    </style>
+  </noscript>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "Wavelet — Complete Feature Reference (v2.0)",
+    "description": "Every control in Wavelet — what it does, what each parameter means, and how it played out in two real presets: a Redmi 12 speaker and a KZ EDX Pro earphone.",
+    "articleSection": ["Foundations", "Feature Reference", "Best Practices", "Appendix"],
+    "inLanguage": "en"
+  }
+  </script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     ICON SPRITE — one symbol per glyph, referenced with <use href="#i-*">
+     24px grid · stroke inherits from .ic (currentColor)
+═══════════════════════════════════════════════════════════════════ -->
+<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <symbol id="i-wave" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></symbol>
+  <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><path d="M9 12l2 2 4-4"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></symbol>
+  <symbol id="i-bars" viewBox="0 0 24 24"><line x1="4" y1="6" x2="4" y2="20"/><line x1="12" y1="2" x2="12" y2="20"/><line x1="20" y1="10" x2="20" y2="20"/></symbol>
+  <symbol id="i-volume" viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></symbol>
+  <symbol id="i-music" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></symbol>
+  <symbol id="i-arch" viewBox="0 0 24 24"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M3 18h18"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 0 20"/><path d="M12 2a15.3 15.3 0 0 0 0 20"/></symbol>
+  <symbol id="i-tune" viewBox="0 0 24 24"><path d="M4 20V4"/><path d="M20 20V4"/><path d="M12 20v-8"/></symbol>
+  <symbol id="i-arrow-r" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+  <symbol id="i-balance" viewBox="0 0 24 24"><line x1="12" y1="3" x2="12" y2="21"/><path d="M3 10l9-7 9 7"/><path d="M3 14l9 7 9-7"/></symbol>
+  <symbol id="i-dial" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93A10 10 0 0 1 6.99 19.07"/><path d="M4.93 4.93a10 10 0 0 1 12.14 14.14"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6"/><path d="M9 12h6"/><path d="M9 15h4"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M18.36 6.64A9 9 0 1 1 5.64 17.36"/><path d="M12 2v4"/><path d="M2 12h4"/></symbol>
+  <symbol id="i-corner" viewBox="0 0 24 24"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></symbol>
+  <symbol id="i-buffer" viewBox="0 0 24 24"><path d="M2 8h20"/><path d="M2 16h20"/></symbol>
+</svg>
+
+<!-- ══════════════════════════════════════════════════════════════════
+     TOP BAR
+═══════════════════════════════════════════════════════════════════ -->
+<header class="topbar">
+  <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="sidebar" aria-label="Open navigation">
+    <span class="nt-bar" aria-hidden="true"></span>
+    <span class="nt-bar" aria-hidden="true"></span>
+    <span class="nt-bar" aria-hidden="true"></span>
+  </button>
+
+  <a class="brand" href="#top" aria-label="Wavelet reference — back to top">
+    <span class="brand-mark"><svg class="ic"><use href="#i-wave"/></svg></span>
+    <span class="brand-name">Wavelet</span>
+    <span class="brand-ver">v2.0</span>
+  </a>
+
+  <span class="topbar-tag">From presets to principles</span>
+
+  <button class="icon-btn" id="themeToggle" aria-label="Switch color theme" aria-pressed="false" title="Switch theme">
+    <svg class="ic ic-sun"><use href="#i-sun"/></svg>
+    <svg class="ic ic-moon"><use href="#i-moon"/></svg>
+  </button>
+</header>
+
+<div class="side-overlay" id="sideOverlay" aria-hidden="true"></div>
+
+<div class="shell">
+
+  <!-- ════════════════════════════════════════════════════════════════
+       SIDEBAR — table of contents
+  ═════════════════════════════════════════════════════════════════ -->
+  <aside class="side" id="sidebar" aria-label="Document sections">
+
+    <p class="side-label">Presets <span class="side-count">02</span></p>
+    <div class="side-chips">
+      <span class="chip chip--redmi">
+        <svg class="ic"><use href="#i-phone"/></svg>
+        Redmi 12 Speaker
+      </span>
+      <span class="chip chip--kz">
+        <svg class="ic"><use href="#i-headphones"/></svg>
+        KZ EDX Pro IEM
+      </span>
+    </div>
+
+    <div class="side-filter">
+      <svg class="ic side-filter-ic" aria-hidden="true"><use href="#i-search"/></svg>
+      <input id="navFilter" type="search" placeholder="Filter sections" aria-label="Filter sections" autocomplete="off" spellcheck="false"/>
+      <kbd class="side-filter-kbd" aria-hidden="true">/</kbd>
+    </div>
+
+    <nav class="side-scroll">
+      <div class="side-group" data-group>
+        <p class="side-label">Foundations <span class="side-count">04</span></p>
+        <ul class="side-nav">
+          <li><a href="#f-philosophy" data-spy="f-philosophy"><span class="nav-num">P1</span>Tuning Philosophy</a></li>
+          <li><a href="#f-methodology" data-spy="f-methodology"><span class="nav-num">P2</span>Methodology</a></li>
+          <li><a href="#f-hardware" data-spy="f-hardware"><span class="nav-num">P3</span>Hardware Limitations</a></li>
+          <li><a href="#f-genre" data-spy="f-genre"><span class="nav-num">P4</span>Genre Dependence</a></li>
+        </ul>
+      </div>
+
+      <div class="side-group" data-group>
+        <p class="side-label">Features · Part 5 <span class="side-count">10</span></p>
+        <ul class="side-nav">
+          <li><a href="#f-autoeq" data-spy="f-autoeq"><span class="nav-num">01</span>AutoEq</a></li>
+          <li><a href="#f-eq" data-spy="f-eq"><span class="nav-num">02</span>Graphic Equalizer</a></li>
+          <li><a href="#f-loudness" data-spy="f-loudness"><span class="nav-num">03</span>Equal Loudness</a></li>
+          <li><a href="#f-bassboost" data-spy="f-bassboost"><span class="nav-num">04</span>Bass Boost (legacy)</a></li>
+          <li><a href="#f-reverb" data-spy="f-reverb"><span class="nav-num">05</span>Reverberation</a></li>
+          <li><a href="#f-virtualizer" data-spy="f-virtualizer"><span class="nav-num">06</span>Virtualizer</a></li>
+          <li><a href="#f-basstuner" data-spy="f-basstuner"><span class="nav-num">07</span>Bass Tuner</a></li>
+          <li><a href="#f-attenuator" data-spy="f-attenuator"><span class="nav-num">08</span>Attenuator</a></li>
+          <li><a href="#f-limiter" data-spy="f-limiter"><span class="nav-num">09</span>Limiter</a></li>
+          <li><a href="#f-balance" data-spy="f-balance"><span class="nav-num">10</span>Channel Balance</a></li>
+        </ul>
+      </div>
+
+      <div class="side-group" data-group>
+        <p class="side-label">Reference <span class="side-count">05</span></p>
+        <ul class="side-nav">
+          <li><a href="#f-system" data-spy="f-system"><span class="nav-num">—</span>General / System</a></li>
+          <li><a href="#f-limiterbp" data-spy="f-limiterbp"><span class="nav-num">P6</span>Limiter Best Practices</a></li>
+          <li><a href="#f-android" data-spy="f-android"><span class="nav-num">P7</span>Android Quirks</a></li>
+          <li><a href="#f-decisions" data-spy="f-decisions"><span class="nav-num">P8</span>Quick Decision Guide</a></li>
+          <li><a href="#f-appendix" data-spy="f-appendix"><span class="nav-num">§</span>Appendix / Presets</a></li>
+        </ul>
+      </div>
+
+      <p class="side-empty" id="sideEmpty" hidden>No sections match that filter.</p>
+    </nav>
+
+    <p class="side-foot">
+      <kbd>/</kbd> search · <kbd>Esc</kbd> close
+    </p>
+  </aside>
+
+  <!-- ════════════════════════════════════════════════════════════════
+       MAIN CONTENT
+  ═════════════════════════════════════════════════════════════════ -->
+  <main class="main" id="main">
+
+    <!-- ── HERO ─────────────────────────────────────────────────────── -->
+    <section class="hero" id="top">
+      <p class="eyebrow" data-d="1">
+        <svg class="ic"><use href="#i-wave"/></svg>
+        Wavelet Audio Equalizer
+      </p>
+      <h1 class="hero-title" data-d="2">Complete Feature<br/><em>Reference</em></h1>
+      <p class="hero-lede" data-d="3">Every control in Wavelet — what it does, what each parameter means, a worked example, and exactly how it played out in the two real presets we built together: your <strong>Redmi 12 built-in speaker</strong> and your <strong>KZ EDX Pro wired earphones</strong>. v2.0 restructures the reasoning behind those presets so they read as validated conclusions, not fixed answers.</p>
+
+      <!-- Frequency-response instrument: Redmi 12 curve −6 −4 −2 0 0 0 −1 −3 −4 dB -->
+      <figure class="chart-card" data-d="4" id="chartCard">
+        <div class="chart-head">
+          <p class="chart-title">
+            <svg class="ic"><use href="#i-dial"/></svg>
+            Per-band correction · frequency response
+          </p>
+          <div class="seg" id="curveSeg" role="group" aria-label="Preset curve" data-active="redmi">
+            <span class="seg-thumb" aria-hidden="true"></span>
+            <button class="seg-btn is-active" type="button" data-series="redmi" aria-pressed="true">Redmi 12</button>
+            <button class="seg-btn" type="button" data-series="kz" aria-pressed="false">KZ EDX Pro</button>
+          </div>
+        </div>
+        <svg class="chart" id="eqChart" viewBox="0 0 760 300" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Frequency response chart: Redmi 12 cuts low and high bands; KZ EDX Pro stays flat because AutoEq handles correction."></svg>
+        <figcaption class="chart-caption" id="eqCaption">
+          <span class="chart-caption-dot" aria-hidden="true"></span>
+          <span>Redmi 12 · built-in speaker — Graphic Equalizer baseline, unchanged in v2.0. Hover the points for per-band dB values.</span>
+        </figcaption>
+      </figure>
+
+      <div class="stat-strip" data-d="5" aria-label="Reference at a glance">
+        <div class="stat">
+          <span class="stat-value" data-count="10">10</span>
+          <span class="stat-label">Features covered</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" data-count="5000" data-format="comma" data-suffix="+">5,000+</span>
+          <span class="stat-label">AutoEq profiles</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" data-count="2">2</span>
+          <span class="stat-label">Devices tuned</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" data-count="2">2</span>
+          <span class="stat-label">Limiter tiers</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value" data-count="9" data-suffix="-band">9-band</span>
+          <span class="stat-label">Graphic EQ</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CHANGELOG ────────────────────────────────────────────────── -->
+    <div class="card-note reveal">
+      <p class="card-label">
+        <svg class="ic"><use href="#i-refresh"/></svg>
+        What changed in v2.0
+      </p>
+      <p>The KZ EDX Pro now runs <strong>AutoEQ only</strong> — every other effect, including the Limiter, is off. The Redmi 12 keeps its subtractive Graphic EQ baseline, but its Limiter is now <strong>optional and context-dependent</strong>: pick a Standard or Dense/Hot-Master tier based on what you're playing, rather than one fixed setting for everything. Four new sections below (Parts 1–4) explain the reasoning so the presets read as validated conclusions, not fixed answers.</p>
+    </div>
+
+    <!-- ── LEGEND ────────────────────────────────────────────────────── -->
+    <div class="card-legend reveal">
+      <p class="card-label">
+        <svg class="ic"><use href="#i-list"/></svg>
+        Preset colour key — used throughout this reference
+      </p>
+      <div class="legend-chips">
+        <span class="chip chip--redmi">
+          <svg class="ic"><use href="#i-phone"/></svg>
+          Redmi 12 built-in speaker
+        </span>
+        <span class="chip chip--kz">
+          <svg class="ic"><use href="#i-headphones"/></svg>
+          KZ EDX Pro wired earphones
+        </span>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════════
+         PART 1 — TUNING PHILOSOPHY
+    ═════════════════════════════════════════════════════════════ -->
+    <section class="sec reveal" id="f-philosophy">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-target"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Part 01 · Foundations</p>
+          <h2 class="sec-title">Tuning Philosophy</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Wavelet's controls are correction tools first, coloration tools second. Every recommendation on this page — and every preset in it — follows the same order of operations:</p>
+      </div>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step-num">1</span>
+          <div class="step-body">
+            <h3 class="step-title">Identify what the transducer objectively cannot do, or does poorly</h3>
+            <p>This is a physical fact — measurable, testable with the processing turned off — not a preference.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-num">2</span>
+          <div class="step-body">
+            <h3 class="step-title">Correct only for that. Nothing more</h3>
+            <p>Adding gain or effects beyond what's needed to fix a known weakness increases clipping risk and makes future problems harder to diagnose.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-num">3</span>
+          <div class="step-body">
+            <h3 class="step-title">Add taste only as a separate, clearly-labeled layer, after the corrective baseline is settled</h3>
+            <p>This guide's presets stop at the corrective baseline; personal coloration is left to you, deliberately.</p>
+          </div>
+        </li>
+      </ol>
+
+      <aside class="callout callout--rule">
+        <p class="callout-title">Working rule — one tool owns one correction</p>
+        <p>Never let AutoEQ, a manual Graphic EQ, and a Bass Tuner all fight over the same frequency region — each layer compounds gain and makes it impossible to tell which one caused a problem when something sounds off. This is exactly what was happening in the original KZ EDX Pro setup, where a manual EQ was re-boosting the same regions AutoEQ was already correcting.</p>
+      </aside>
+      <aside class="callout callout--rule">
+        <p class="callout-title">Working rule — a "final" preset is a validated hypothesis, not a ruling</p>
+        <p>It's the best current answer given the evidence gathered so far — driver behavior, genre testing, platform quirks. New evidence should update it. Nothing in this guide is meant to be defended past the point where a listening test contradicts it.</p>
+      </aside>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         PART 2 — METHODOLOGY
+    ═════════════════════════════════════════════════════════════ -->
+    <section class="sec reveal" id="f-methodology">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-clipboard"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Part 02 · Foundations</p>
+          <h2 class="sec-title">Methodology</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>How the conclusions in this guide were actually reached — so you can repeat the process yourself when something new comes up.</p>
+      </div>
+
+      <ol class="steps">
+        <li class="step">
+          <span class="step-num">1</span>
+          <div class="step-body">
+            <h3 class="step-title">Isolate the variable</h3>
+            <p>When something sounds wrong, test with Wavelet fully OFF before touching any single setting. This separates DSP-caused issues from hardware or source-material issues.</p>
+            <p class="step-tag"><svg class="ic"><use href="#i-corner"/></svg>How the Redmi 12's high-volume buzzing was confirmed as a hardware ceiling, not an EQ problem — it persisted with Wavelet completely disabled</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-num">2</span>
+          <div class="step-body">
+            <h3 class="step-title">Attribute cause correctly before prescribing a fix</h3>
+            <p>A symptom like "songs sound slow" can come from limiter pumping, a CPU buffer underrun, or OS background throttling — three unrelated causes with three unrelated fixes. Reason through each rather than assuming the most recently changed setting is the culprit.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-num">3</span>
+          <div class="step-body">
+            <h3 class="step-title">Test against representative material, not one track</h3>
+            <p>A limiter setting validated only on pop/vocal music won't necessarily hold on a differently-mastered genre. Both need testing before a preset is called "done."</p>
+            <p class="step-tag"><svg class="ic"><use href="#i-corner"/></svg>Exactly how the Redmi 12's Limiter was found to work fine on standard tracks but pump on hard rock/metal</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-num">4</span>
+          <div class="step-body">
+            <h3 class="step-title">Prefer subtraction over addition</h3>
+            <p>Removing a driver's known weak points is lower-risk than boosting to compensate for them — boosting adds gain, headroom pressure, and clipping risk for a result the driver often can't cleanly reproduce anyway.</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step-num">5</span>
+          <div class="step-body">
+            <h3 class="step-title">Treat platform behavior as a variable, not a constant</h3>
+            <p>Android's audio effect implementation differs by OEM and OS version. A slider's real adjustable range, or whether an effect is even available, can differ from device to device and can change after an update. Verify live rather than trusting a remembered value.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         PART 3 — HARDWARE LIMITATIONS
+    ═════════════════════════════════════════════════════════════ -->
+    <section class="sec reveal" id="f-hardware">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-zap"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Part 03 · Objective</p>
+          <h2 class="sec-title">Hardware Limitations</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Every transducer has a frequency range and an excursion budget it can reproduce cleanly. Pushing it further with EQ doesn't recover missing sound — it adds distortion. This section is about physical fact, not taste.</p>
+      </div>
+
+      <div class="device-grid">
+        <article class="device device--redmi">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span>Redmi 12 (built-in speaker)</span>
+          </header>
+          <div class="device-body">
+            <ul>
+              <li>A single, mono, bottom-firing driver — there is no stereo image to preserve or widen, by construction.</li>
+              <li>Its diaphragm excursion budget is small. Deep bass content pushes it past clean linear movement, producing audible buzzing/rattling at high volume. This is a mechanical ceiling — confirmed reproducible even with Wavelet fully disabled — not something any EQ or limiter setting removes.</li>
+              <li>Because of that ceiling, the correction philosophy here is <strong>subtractive</strong>: remove the frequencies the driver can't move cleanly, rather than boosting to compensate for their absence (which would just turn into distortion — "fake bass").</li>
+            </ul>
+          </div>
+        </article>
+        <article class="device device--kz">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            <span>KZ EDX Pro (dynamic-driver IEM)</span>
+          </header>
+          <div class="device-body">
+            <ul>
+              <li>Seated directly in the ear canal — high sensitivity, and no meaningful physical excursion limit at normal phone output levels. Clipping/distortion risk from the hardware itself is effectively negligible in this use case.</li>
+              <li>Its deviations from a neutral response are tuning choices baked into the driver and shell design — measured and catalogued in AutoEQ's database — not excursion failures.</li>
+              <li>The correction tool that fits this is a <strong>measured EQ curve (AutoEQ)</strong>, not a protective one (Limiter).</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         PART 4 — GENRE DEPENDENCE
+    ═════════════════════════════════════════════════════════════ -->
+    <section class="sec reveal" id="f-genre">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-sliders"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Part 04 · Objective fact, subjective consequence</p>
+          <h2 class="sec-title">Genre Dependence</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Mastering loudness and dynamic range vary systematically by genre. Heavily produced, high-average-loudness genres (metal, hard rock, EDM) leave little headroom between average and peak level. Quieter, more dynamic genres (acoustic, jazz, classical, much vocal-forward pop) leave considerably more.</p>
+      </div>
+
+      <div class="meters" data-animate>
+        <div class="meter">
+          <span class="meter-label">Acoustic / Jazz / Classical</span>
+          <span class="meter-track"><span class="meter-fill" style="--w:85%"></span></span>
+          <span class="meter-value">Wide headroom</span>
+        </div>
+        <div class="meter">
+          <span class="meter-label">Vocal-forward Pop</span>
+          <span class="meter-track"><span class="meter-fill" style="--w:55%"></span></span>
+          <span class="meter-value">Moderate headroom</span>
+        </div>
+        <div class="meter">
+          <span class="meter-label">Hard Rock / Metal / EDM</span>
+          <span class="meter-track"><span class="meter-fill" style="--w:18%"></span></span>
+          <span class="meter-value">Little headroom</span>
+        </div>
+      </div>
+      <p class="fig-cap">↑ Illustrative comparison of typical headroom between average and peak loudness by genre — not measured dB values.</p>
+
+      <div class="prose">
+        <p>A limiter's threshold is a fixed dB value. Against a genre that already sits close to that value most of the time, the limiter engages almost continuously instead of only on rare peaks — producing audible pumping that the same setting doesn't cause on more dynamic material. This was diagnosed directly on the Redmi 12: identical Limiter values sounded clean on standard tracks and chaotic on hard rock/metal.</p>
+      </div>
+
+      <aside class="callout callout--rule">
+        <p class="callout-title">Consequence</p>
+        <p>There is no single limiter configuration that is simultaneously correct for a heavily compressed genre and a dynamic one. That's not a flaw in any one setting — it's an inherent property of applying one fixed threshold/ratio/attack/release combination to material with very different loudness profiles. Practically, this means the Limiter is best treated as a context-dependent tool with more than one validated configuration, not one universal number. See <a href="#f-limiterbp">Limiter Best Practices</a>.</p>
+      </aside>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         PART 5 — FEATURE REFERENCE
+    ═════════════════════════════════════════════════════════════ -->
+    <div class="part reveal" aria-hidden="true">
+      <p class="part-ghost">05</p>
+      <div class="part-meta">
+        <span class="part-tag">Part 5</span>
+        <span class="part-line"></span>
+      </div>
+    </div>
+
+    <!-- ── FEATURE 01 · AUTOEQ ──────────────────────────────────────── -->
+    <section class="sec reveal" id="f-autoeq">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-star"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Feature 01</p>
+          <h2 class="sec-title">AutoEq</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>A database of 5,000+ pre-measured headphone/earphone models. Instead of guessing an EQ curve, Wavelet applies a correction curve someone already measured for your exact model, targeting a neutral, "Harman-style" reference sound. Headphones/earbuds only — there's no database entry for phone speakers.</p>
+      </div>
+
+      <dl class="spec">
+        <div class="spec-head">
+          <svg class="ic"><use href="#i-dial"/></svg>
+          <span>Parameters</span>
+        </div>
+        <div class="spec-row">
+          <dt>Headphone model</dt>
+          <dd>Search field — no manual numbers needed.</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Import</dt>
+          <dd>Load a custom-measured curve if your model isn't in the database.</dd>
+        </div>
+      </dl>
+
+      <aside class="callout callout--example">
+        <p class="callout-title">Generic example</p>
+        <p>Search "KZ EDX Pro," select it → Wavelet instantly applies dozens of small per-band corrections tuned to that exact driver.</p>
+      </aside>
+
+      <div class="device-grid">
+        <article class="device device--kz">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            <span>KZ EDX Pro</span>
+            <span class="status status--on">ON</span>
+          </header>
+          <div class="device-body">
+            <p>Headphone model: <code>KZ EDX Pro</code>. Per the latest conclusion, this is now the <strong>only</strong> active processing stage besides General settings — every other effect on this device, including the Limiter, is off.</p>
+          </div>
+        </article>
+        <article class="device device--na">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span>Redmi 12 Speaker</span>
+            <span class="status status--na">N/A</span>
+          </header>
+          <div class="device-body">
+            <p>No speaker profiles exist in the AutoEq database — this is exactly <em>why</em> the Redmi 12 walkthrough leaned entirely on the Graphic Equalizer instead.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── FEATURE 02 · GRAPHIC EQUALIZER ───────────────────────────── -->
+    <section class="sec reveal" id="f-eq">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-bars"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Feature 02</p>
+          <h2 class="sec-title">Graphic Equalizer</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>A 9-band manual EQ — 62.5Hz, 125Hz, 250Hz, 500Hz, 1kHz, 2kHz, 4kHz, 8kHz, 16kHz (your Redmi 12 setup showed its top band as 10kHz — some devices/app versions label the last band slightly differently). Your main tool for speakers, or for fixing what AutoEq doesn't cover on headphones.</p>
+      </div>
+
+      <dl class="spec">
+        <div class="spec-head">
+          <svg class="ic"><use href="#i-dial"/></svg>
+          <span>Parameters</span>
+        </div>
+        <div class="spec-row">
+          <dt>Presets</dt>
+          <dd>Flat, Bass Boost, Treble Boost, Loudness, Vocal Boost, or fully manual "Personal."</dd>
+        </div>
+      </dl>
+
+      <aside class="callout callout--example">
+        <p class="callout-title">Generic example</p>
+        <p>Cutting 8kHz by <strong>−3dB</strong> tames harsh cymbal sizzle. Boosting 2kHz by <strong>+1dB</strong> adds vocal clarity.</p>
+      </aside>
+
+      <div class="device-grid">
+        <article class="device device--redmi">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span>Redmi 12 Speaker</span>
+            <span class="status status--on">ON</span>
+          </header>
+          <div class="device-body">
+            <p>Full manual curve — heavy bass cut because the driver can't reproduce it cleanly, 2kHz restored to 0dB for vocal clarity, treble rolled off to avoid the driver's breakup distortion.</p>
+
+            <div class="vals">
+              <span class="val"><strong>62.5Hz</strong> −6dB</span>
+              <span class="val"><strong>125Hz</strong> −4dB</span>
+              <span class="val"><strong>250Hz</strong> −2dB</span>
+              <span class="val"><strong>500Hz</strong> 0dB</span>
+              <span class="val"><strong>1kHz</strong> 0dB</span>
+              <span class="val"><strong>2kHz</strong> 0dB</span>
+              <span class="val"><strong>4kHz</strong> −1dB</span>
+              <span class="val"><strong>8kHz</strong> −3dB</span>
+              <span class="val"><strong>10kHz</strong> −4dB</span>
+            </div>
+
+            <!-- Cut-depth chart: every band sits at or below 0 dB — subtractive by design. -->
+            <figure class="bandchart" data-animate>
+              <div class="bc-frame" role="img" aria-label="Per-band cut depth: 62.5 Hz minus 6 dB, 125 Hz minus 4, 250 Hz minus 2, 500 Hz 0, 1 kHz 0, 2 kHz 0, 4 kHz minus 1, 8 kHz minus 3, 10 kHz minus 4.">
+                <span class="bc-band"><span class="bc-bar" style="--v:6" title="62.5 Hz · −6 dB"></span></span>
+                <span class="bc-band"><span class="bc-bar" style="--v:4" title="125 Hz · −4 dB"></span></span>
+                <span class="bc-band"><span class="bc-bar" style="--v:2" title="250 Hz · −2 dB"></span></span>
+                <span class="bc-band"><span class="bc-bar bc-bar--zero" style="--v:0" title="500 Hz · 0 dB"></span></span>
+                <span class="bc-band"><span class="bc-bar bc-bar--zero" style="--v:0" title="1 kHz · 0 dB"></span></span>
+                <span class="bc-band"><span class="bc-bar bc-bar--zero" style="--v:0" title="2 kHz · 0 dB"></span></span>
+                <span class="bc-band"><span class="bc-bar" style="--v:1" title="4 kHz · −1 dB"></span></span>
+                <span class="bc-band"><span class="bc-bar" style="--v:3" title="8 kHz · −3 dB"></span></span>
+                <span class="bc-band"><span class="bc-bar" style="--v:4" title="10 kHz · −4 dB"></span></span>
+              </div>
+              <div class="bc-labels" aria-hidden="true">
+                <span>62.5</span><span>125</span><span>250</span><span>500</span><span>1k</span><span>2k</span><span>4k</span><span>8k</span><span>10k</span>
+              </div>
+            </figure>
+            <p class="fig-cap">↑ Cut depth per band — every value sits at or below 0 dB: a purely subtractive curve.</p>
+
+            <p>Framed as a baseline, not a final answer — open to revision as more genres are tested (see <a href="#f-philosophy">Tuning Philosophy</a>).</p>
+          </div>
+        </article>
+        <article class="device device--kz">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            <span>KZ EDX Pro</span>
+            <span class="status status--off">OFF</span>
+          </header>
+          <div class="device-body">
+            <p>Redundant against AutoEQ. Your original setup had this stacked on top of AutoEQ, re-boosting the same bass/treble regions AutoEQ was already correcting — that double-correction was the #1 diagnosis. Keeping AutoEQ as the sole correction layer avoids double-correction.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── FEATURE 03 · EQUAL LOUDNESS ──────────────────────────────── -->
+    <section class="sec reveal" id="f-loudness">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-volume"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Feature 03</p>
+          <h2 class="sec-title">Equal Loudness</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Implements the ISO 226 standard — ears hear bass/treble as weaker at low volume than high volume. This auto-compensates so tonal balance feels consistent at any volume.</p>
+      </div>
+
+      <dl class="spec">
+        <div class="spec-head">
+          <svg class="ic"><use href="#i-dial"/></svg>
+          <span>Parameters</span>
+        </div>
+        <div class="spec-row">
+          <dt>Volume threshold</dt>
+          <dd>The level above which compensation stops changing; set it near your normal listening volume.</dd>
+        </div>
+      </dl>
+
+      <aside class="callout callout--example">
+        <p class="callout-title">Generic example</p>
+        <p>Threshold at 50% device volume — below it, Wavelet gently lifts bass/treble; above it, EQ stays as configured.</p>
+      </aside>
+
+      <div class="device-grid">
+        <article class="device device--kz">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            <span>KZ EDX Pro</span>
+            <span class="status status--off">OFF</span>
+          </header>
+          <div class="device-body">
+            <p>Left off deliberately — the current AutoEQ-only baseline doesn't use it. It's a legitimate optional addition if your typical listening volume varies a lot day to day, but it would shift the tonal balance underneath the already-precise AutoEQ curve.</p>
+          </div>
+        </article>
+        <article class="device device--redmi">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span>Redmi 12 Speaker</span>
+            <span class="status status--off">OFF</span>
+          </header>
+          <div class="device-body">
+            <p>Not part of that baseline either. You already hand-tuned the curve for one listening level, so turning this on would start shifting bass/treble again as volume changes — worth testing carefully rather than enabling by default.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── FEATURE 04 · BASS BOOST (LEGACY) ─────────────────────────── -->
+    <section class="sec reveal" id="f-bassboost">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-music"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Feature 04 <span class="sec-chip">Legacy</span></p>
+          <h2 class="sec-title">Bass Boost</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>A basic global bass amplifier, Android 9 only. Superseded by Bass Tuner on anything newer.</p>
+      </div>
+
+      <div class="device-grid">
+        <article class="device device--na">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span>Redmi 12 Speaker</span>
+            <span class="status status--na">N/A</span>
+          </header>
+          <div class="device-body">
+            <p>N/A for both — Redmi 12 and the phone driving your KZ EDX Pro are both well past Android 9, so this control shouldn't even appear in your app.</p>
+          </div>
+        </article>
+        <article class="device device--na">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            <span>KZ EDX Pro</span>
+            <span class="status status--na">N/A</span>
+          </header>
+          <div class="device-body">
+            <p>N/A for both — Redmi 12 and the phone driving your KZ EDX Pro are both well past Android 9, so this control shouldn't even appear in your app.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── FEATURE 05 · REVERBERATION ────────────────────────────────── -->
+    <section class="sec reveal" id="f-reverb">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-arch"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Feature 05</p>
+          <h2 class="sec-title">Reverberation</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Simulates a physical room's reflections — the difference between "in your head" headphone sound and "in a space" sound. Only available when <strong>Legacy Mode is OFF</strong>.</p>
+      </div>
+
+      <dl class="spec">
+        <div class="spec-head">
+          <svg class="ic"><use href="#i-dial"/></svg>
+          <span>Parameters</span>
+        </div>
+        <div class="spec-row">
+          <dt>Preset</dt>
+          <dd>Room size, from small room up to large hall.</dd>
+        </div>
+      </dl>
+
+      <div class="device-grid">
+        <article class="device device--kz">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            <span>KZ EDX Pro</span>
+            <span class="status status--off">OFF</span>
+          </header>
+          <div class="device-body">
+            <p>In-ear monitors like these do sound very "in-head" by nature, and a small-room preset could open that up — but it wasn't part of the tuned preset because the goal there was accuracy (matching AutoEQ's neutral target), not adding color. Not ruled out as a future taste addition, just not part of the corrective baseline.</p>
+          </div>
+        </article>
+        <article class="device device--redmi">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span>Redmi 12 Speaker</span>
+            <span class="status status--off">OFF</span>
+          </header>
+          <div class="device-body">
+            <p>Less useful here anyway — you're playing through a real speaker into a real room, so you already get genuine reflections; layering artificial ones on top tends to just muddy things. Same rule applies: taste additions come after the baseline, not instead of it.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── FEATURE 06 · VIRTUALIZER ─────────────────────────────────── -->
+    <section class="sec reveal" id="f-virtualizer">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-globe"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Feature 06</p>
+          <h2 class="sec-title">Virtualizer</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Spatializes stereo channels to widen the perceived soundstage.</p>
+      </div>
+
+      <dl class="spec">
+        <div class="spec-head">
+          <svg class="ic"><use href="#i-dial"/></svg>
+          <span>Parameters</span>
+        </div>
+        <div class="spec-row">
+          <dt>Strength</dt>
+          <dd>Amount of stereo widening.</dd>
+        </div>
+      </dl>
+
+      <div class="device-grid">
+        <article class="device device--kz">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            <span>KZ EDX Pro</span>
+            <span class="status status--off">OFF</span>
+          </header>
+          <div class="device-body">
+            <p>Not used, though a legitimate optional add-on if narrow in-ear imaging bothers you — IEM drivers sit directly in your ear canal, so stereo can feel narrow. It wasn't needed for the "clean, accurate" goal of the current preset.</p>
+          </div>
+        </article>
+        <article class="device device--na">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span>Redmi 12 Speaker</span>
+            <span class="status status--na">N/A</span>
+          </header>
+          <div class="device-body">
+            <p>Not applicable at all — it's a single, mono, bottom-firing speaker. There's no stereo image to widen in the first place.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── FEATURE 07 · BASS TUNER ───────────────────────────────────── -->
+    <section class="sec reveal" id="f-basstuner">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-tune"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Feature 07</p>
+          <h2 class="sec-title">Bass Tuner</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Precision bass tool for fixing one specific resonance or cancellation point — more surgical than a graphic EQ band.</p>
+      </div>
+
+      <dl class="spec">
+        <div class="spec-head">
+          <svg class="ic"><use href="#i-dial"/></svg>
+          <span>Parameters</span>
+        </div>
+        <div class="spec-row">
+          <dt>Bass type</dt>
+          <dd><em>Natural</em> (linear), <em>Transient compressor</em> (reshapes punch/attack), <em>Sustain compressor</em> (reshapes rumble/decay only).</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Cutoff frequency</dt>
+          <dd>The ceiling below which the effect applies.</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Post-gain</dt>
+          <dd>The boost/cut applied within that range.</dd>
+        </div>
+      </dl>
+
+      <aside class="callout callout--example">
+        <p class="callout-title">Generic example</p>
+        <p>Cutoff 100Hz, Post-gain +3dB, <em>Natural</em> → adds sub-bass weight below 100Hz only.</p>
+      </aside>
+
+      <div class="device-grid">
+        <article class="device device--kz">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            <span>KZ EDX Pro</span>
+            <span class="status status--off">OFF</span>
+          </header>
+          <div class="device-body">
+            <p>Previously enabled but inert (0dB) — doing literally nothing while sitting in the chain, with no identified resonance to target. The earphone's stock bass is already handled by AutoEQ, so it stays off.</p>
+          </div>
+        </article>
+        <article class="device device--na">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span>Redmi 12 Speaker</span>
+            <span class="status status--opt">Candidate</span>
+          </header>
+          <div class="device-body">
+            <p>Not part of the current baseline. The ~250Hz region is a plausible candidate for future targeted correction, but hasn't been isolated with dedicated testing yet — per the <a href="#f-philosophy">Tuning Philosophy</a> rule against stacking corrective tools without evidence, it stays out of the baseline for now.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── FEATURE 08 · ATTENUATOR ──────────────────────────────────── -->
+    <section class="sec reveal" id="f-attenuator">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-arrow-r"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Feature 08</p>
+          <h2 class="sec-title">Attenuator</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>The first stage of processing — a pre-gain trim that creates headroom before anything else happens, so later boosts don't clip.</p>
+      </div>
+
+      <dl class="spec">
+        <div class="spec-head">
+          <svg class="ic"><use href="#i-dial"/></svg>
+          <span>Parameters</span>
+        </div>
+        <div class="spec-row">
+          <dt>Automatic attenuation</dt>
+          <dd>Wavelet calculates combined peak gain and auto-sets the trim.</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Attenuation</dt>
+          <dd>Manual dB value you set yourself.</dd>
+        </div>
+      </dl>
+
+      <div class="device-grid">
+        <article class="device device--redmi">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span>Redmi 12 Speaker</span>
+            <span class="status status--off">OFF</span>
+          </header>
+          <div class="device-body">
+            <p>Your final Graphic EQ curve is net-negative (far more cuts than boosts), so there's no extra gain that needs compensating — turning it on would just lower volume for no benefit. Revisit only if a future EQ addition adds positive gain somewhere.</p>
+          </div>
+        </article>
+        <article class="device device--kz">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            <span>KZ EDX Pro</span>
+            <span class="status status--off">OFF</span>
+          </header>
+          <div class="device-body">
+            <p>With Graphic EQ, Bass Tuner, and now Limiter all off, AutoEQ is the only stage doing any correction — it manages its own internal gain compensation, so there's nothing extra to attenuate.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── FEATURE 09 · LIMITER ─────────────────────────────────────── -->
+    <section class="sec reveal" id="f-limiter">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-shield"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Feature 09</p>
+          <h2 class="sec-title">Limiter</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Catches transient peaks that slip past the Attenuator's average headroom. Whether to use it at all is now treated as a risk question, not a default — full mechanics and both Redmi 12 tiers are broken out separately in <a href="#f-limiterbp">Limiter Best Practices (Part 6)</a>.</p>
+      </div>
+
+      <dl class="spec">
+        <div class="spec-head">
+          <svg class="ic"><use href="#i-dial"/></svg>
+          <span>Parameters</span>
+        </div>
+        <div class="spec-row">
+          <dt>Attack time</dt>
+          <dd>Reaction speed. Fast (1–2ms) = effective but can be audible. Slow (10ms+) = natural, but front edge of peaks may sneak through.</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Release time</dt>
+          <dd>How long reduction holds. Fast = audible "pumping." Slow = smoother, can smear into the next transient.</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Ratio</dt>
+          <dd>Reduction strength above threshold (4:1 = a 4dB-over peak comes out 1dB over).</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Threshold</dt>
+          <dd>Level where limiting starts — also determines how often the limiter engages against a given genre's typical loudness.</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Post-gain</dt>
+          <dd>Makeup gain added back after limiting.</dd>
+        </div>
+      </dl>
+
+      <div class="device-grid">
+        <article class="device device--redmi">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span>Redmi 12 Speaker</span>
+            <span class="status status--opt">OPTIONAL</span>
+          </header>
+          <div class="device-body">
+            <p><strong>OFF by default.</strong> Not a mandatory always-on effect — a deliberate choice for high-volume listening or hot-mastered genres, with two candidate configurations depending on material (see <a href="#f-genre">Genre Dependence</a>).</p>
+
+            <span class="val-label">Standard tier</span>
+            <div class="vals">
+              <span class="val"><strong>Attack</strong> 1ms</span>
+              <span class="val"><strong>Release</strong> 100ms</span>
+              <span class="val"><strong>Ratio</strong> 10:1</span>
+              <span class="val"><strong>Threshold</strong> −2dB</span>
+              <span class="val"><strong>Post-gain</strong> 0dB</span>
+            </div>
+
+            <span class="val-label">Dense / Hot-Master tier</span>
+            <div class="vals">
+              <span class="val"><strong>Attack</strong> 4ms</span>
+              <span class="val"><strong>Release</strong> 100ms*</span>
+              <span class="val"><strong>Ratio</strong> 5:1</span>
+              <span class="val"><strong>Threshold</strong> −2dB</span>
+              <span class="val"><strong>Post-gain</strong> 0dB</span>
+            </div>
+
+            <p class="fig-cap">*Verify your device's live-adjustable ceiling — full details in <a href="#f-limiterbp">Limiter Best Practices</a>.</p>
+          </div>
+        </article>
+        <article class="device device--kz">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            <span>KZ EDX Pro</span>
+            <span class="status status--off">OFF</span>
+          </header>
+          <div class="device-body">
+            <p>No meaningful physical clipping risk on this driver at phone-level output, and AutoEQ alone doesn't add gain that needs a safety net. Removing it also cuts DSP load, which incidentally resolved an earlier, unrelated processing-stutter symptom.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── FEATURE 10 · CHANNEL BALANCE ──────────────────────────────── -->
+    <section class="sec reveal" id="f-balance">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-balance"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Feature 10</p>
+          <h2 class="sec-title">Channel Balance</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Independent left/right output volume control — for off-center listening, mismatched drivers, or sidestepping a device's automatic volume-ducking.</p>
+      </div>
+
+      <dl class="spec">
+        <div class="spec-head">
+          <svg class="ic"><use href="#i-dial"/></svg>
+          <span>Parameters</span>
+        </div>
+        <div class="spec-row">
+          <dt>Channel gain</dt>
+          <dd>Balance slider between L and R.</dd>
+        </div>
+      </dl>
+
+      <div class="device-grid">
+        <article class="device device--na">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <span>Redmi 12 Speaker</span>
+            <span class="status status--off">OFF / Centered</span>
+          </header>
+          <div class="device-body">
+            <p>Only one speaker exists, so there's nothing to balance.</p>
+          </div>
+        </article>
+        <article class="device device--na">
+          <header class="device-head">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            <span>KZ EDX Pro</span>
+            <span class="status status--off">OFF / Centered</span>
+          </header>
+          <div class="device-body">
+            <p>No left/right mismatch was reported, so this stayed untouched.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ── SYSTEM SETTINGS ──────────────────────────────────────────── -->
+    <section class="sec reveal" id="f-system">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-dial"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Part 5, cont'd · System</p>
+          <h2 class="sec-title">General / System Settings</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Not part of the effects chain — these control <em>how</em> Wavelet attaches to your audio.</p>
+      </div>
+
+      <div class="card-grid">
+        <article class="card">
+          <header class="card-head">
+            <svg class="ic"><use href="#i-buffer"/></svg>
+            <h3>Buffer Size</h3>
+          </header>
+          <p>Low = less precise, lower latency (good for video). High = more precise, higher latency (better for music). Setting it beyond what the processor can compute in real time produces audible clicking, cracking, or stutter — which can be mistaken for "slow" playback.</p>
+          <p><strong>Both setups:</strong> Since you're listening to music only (not video) on both the Redmi 12 speaker and through the KZ EDX Pro, a higher buffer (<code>4096 samples</code>) is the right default. Drop it only if you hear crackling.</p>
+        </article>
+        <article class="card">
+          <header class="card-head">
+            <svg class="ic"><use href="#i-refresh"/></svg>
+            <h3>Legacy Mode</h3>
+          </header>
+          <p>Off by default — a targeted compatibility fix for apps Wavelet can't auto-detect, not a default-on setting. Turning it on disables Reverberation and, on some devices, other effects.</p>
+          <p><strong>Both setups:</strong> Leave OFF unless Wavelet's notification shows it isn't attached to your music app during playback. Neither setup showed a compatibility issue requiring it.</p>
+        </article>
+        <article class="card">
+          <header class="card-head">
+            <svg class="ic"><use href="#i-search"/></svg>
+            <h3>Enhanced Session Detection</h3>
+          </header>
+          <p>Experimental, Android 10+. Actively watches for any audio session instead of waiting for a broadcast. Requires Developer Options + USB debugging + a one-time DUMP permission grant via ADB.</p>
+          <p><strong>Both setups:</strong> Not needed for either — this is a last-resort fix, only worth touching if Legacy Mode alone fails to get a specific app working.</p>
+        </article>
+        <article class="card">
+          <header class="card-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <h3>Background & Battery Permission</h3>
+          </header>
+          <p>Aggressive OEM battery managers — particularly MIUI/HyperOS on Xiaomi devices like the Redmi 12 — can intermittently suspend Wavelet's background processing, producing symptoms indistinguishable from a bad DSP setting.</p>
+          <p><strong>Redmi 12 specifically:</strong> grant Wavelet unrestricted background/battery permission, and rule this out before attributing a playback problem to an EQ or Limiter value (see <a href="#f-android">Android Quirks</a>).</p>
+        </article>
+        <article class="card">
+          <header class="card-head">
+            <svg class="ic"><use href="#i-arrow-r"/></svg>
+            <h3>Input Gain</h3>
+          </header>
+          <p>A newer addition in recent Wavelet versions, split out as its own manual pre-gain stage alongside the Attenuator.</p>
+          <p><strong>Both setups:</strong> Not part of either preset — both setups achieved correct headroom through the Attenuator alone, so there was no need to reach for this.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         PART 6 — LIMITER BEST PRACTICES
+    ═════════════════════════════════════════════════════════════ -->
+    <div class="part reveal" aria-hidden="true">
+      <p class="part-ghost">06</p>
+      <div class="part-meta">
+        <span class="part-tag">Part 6</span>
+        <span class="part-line"></span>
+      </div>
+    </div>
+
+    <section class="sec reveal" id="f-limiterbp">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-shield"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Part 6</p>
+          <h2 class="sec-title">Limiter Best Practices</h2>
+        </div>
+      </header>
+
+      <dl class="spec">
+        <div class="spec-head">
+          <svg class="ic"><use href="#i-dial"/></svg>
+          <span>Mechanical recap (objective)</span>
+        </div>
+        <div class="spec-row">
+          <dt>Attack</dt>
+          <dd>Reaction speed. Fast (1–2ms) = effective but audible; slow (10ms+) = natural, but the front edge of a peak may slip through.</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Release</dt>
+          <dd>How long gain reduction holds. Fast = audible "pumping"; slow = smoother but can smear into the next transient.</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Ratio</dt>
+          <dd>Reduction strength above threshold (a 4:1 ratio turns a 4dB-over peak into 1dB-over).</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Threshold</dt>
+          <dd>The level where limiting starts; also determines how often the limiter engages against a given genre's typical loudness (see <a href="#f-genre">Genre Dependence</a>).</dd>
+        </div>
+        <div class="spec-row">
+          <dt>Post-gain</dt>
+          <dd>Makeup gain added back after limiting.</dd>
+        </div>
+      </dl>
+
+      <aside class="callout callout--rule">
+        <p class="callout-title">Whether to use it at all is a risk question, not a default</p>
+        <p>A limiter is protection proportional to actual physical risk. Apply it where a real excursion/clipping risk exists — a small speaker driven at high volume; skip it where that risk is negligible — an efficient IEM at phone output levels. Running one anyway adds DSP load and complexity for no corrective benefit, which is exactly what happened when it was removed from the KZ EDX Pro setup.</p>
+      </aside>
+
+      <h3 class="sub-title">Redmi 12 — two validated tiers, not one universal setting</h3>
+      <p class="sub-lede">Part 4 (<a href="#f-genre">Genre Dependence</a>) explains why one setting can't serve both cases.</p>
+
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Redmi 12 limiter tiers: parameters and when to use each tier.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Tier</th>
+              <th scope="col">Attack</th>
+              <th scope="col">Release</th>
+              <th scope="col">Ratio</th>
+              <th scope="col">Threshold</th>
+              <th scope="col">Post-gain</th>
+              <th scope="col">Use when</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Standard</strong></td>
+              <td class="num">1ms</td>
+              <td class="num">100ms</td>
+              <td class="num">10:1</td>
+              <td class="num">−2dB</td>
+              <td class="num">0dB</td>
+              <td>Typical, dynamically-mastered tracks — validated clean on vocal-forward/standard material</td>
+            </tr>
+            <tr>
+              <td><strong>Dense / Hot-Master</strong></td>
+              <td class="num">4ms</td>
+              <td class="num">100ms*</td>
+              <td class="num">5:1</td>
+              <td class="num">−2dB</td>
+              <td class="num">0dB</td>
+              <td>Hard rock, metal, EDM, or other heavily compressed genres — validated to remove the pumping/chaos the Standard tier caused on this material</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="fig-cap">*Release is shown at the device's currently observed ceiling — verify your own live-adjustable maximum rather than assuming this figure (see <a href="#f-android">Android Quirks</a>).</p>
+
+      <aside class="callout callout--example">
+        <p class="callout-title">If pumping persists on the Dense tier</p>
+        <p>The next lever is Threshold, not Ratio or Attack — moving it to −3dB reduces how often the limiter engages in the first place, independent of how hard it squeezes when it does.</p>
+      </aside>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         PART 7 — ANDROID / WAVELET IMPLEMENTATION QUIRKS
+    ═════════════════════════════════════════════════════════════ -->
+    <div class="part reveal" aria-hidden="true">
+      <p class="part-ghost">07</p>
+      <div class="part-meta">
+        <span class="part-tag">Part 7</span>
+        <span class="part-line"></span>
+      </div>
+    </div>
+
+    <section class="sec reveal" id="f-android">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-phone"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Part 7</p>
+          <h2 class="sec-title">Android / Wavelet Implementation Quirks</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Some symptoms that look like bad tuning are actually platform behavior. Ruling these out is part of the <a href="#f-methodology">Methodology</a>.</p>
+      </div>
+
+      <div class="card-grid">
+        <article class="card">
+          <header class="card-head">
+            <svg class="ic"><use href="#i-tune"/></svg>
+            <h3>Parameter quantization</h3>
+          </header>
+          <p>Android's DynamicsProcessing API exposes fixed steps, not free continuous values. Dialing in "8.0:1" and observing it settle at "7.2:1" is the platform snapping to its nearest supported step — not a bug, and not a meaningful change in behavior (sub-1.0 ratio differences are inaudible).</p>
+        </article>
+        <article class="card">
+          <header class="card-head">
+            <svg class="ic"><use href="#i-dial"/></svg>
+            <h3>Parameter range differences</h3>
+          </header>
+          <p>The maximum adjustable Release time isn't guaranteed identical across devices, or even across time on the same device — an inconsistency was observed on the Redmi 12 between an originally-reported 120ms value and a later 100ms ceiling. Always verify the live-adjustable range on your actual device rather than trusting a remembered or documented figure.</p>
+        </article>
+        <article class="card">
+          <header class="card-head">
+            <svg class="ic"><use href="#i-buffer"/></svg>
+            <h3>Buffer size vs. real-time load</h3>
+          </header>
+          <p>Setting Buffer Size beyond what the device's processor can compute in real time produces audible clicking, cracking, or stutter — which can be mistaken for "slow" playback. The fix is empirical: start high for better precision on music, step down only if artifacts appear.</p>
+        </article>
+        <article class="card">
+          <header class="card-head">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            <h3>OEM background process management</h3>
+          </header>
+          <p>Aggressive battery managers — particularly MIUI/HyperOS on Xiaomi devices like the Redmi 12 — can intermittently suspend Wavelet's background processing, producing symptoms indistinguishable from a bad DSP setting. Rule this out (unrestricted background/battery permission) before attributing a playback problem to an EQ or Limiter value.</p>
+        </article>
+        <article class="card">
+          <header class="card-head">
+            <svg class="ic"><use href="#i-refresh"/></svg>
+            <h3>Legacy Mode trade-off</h3>
+          </header>
+          <p>Enabling it for compatibility with a stubborn app disables Reverberation, and can disable other effects depending on device — a targeted compatibility fix, not a default-on setting.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         PART 8 — QUICK DECISION GUIDE
+    ═════════════════════════════════════════════════════════════ -->
+    <div class="part reveal" aria-hidden="true">
+      <p class="part-ghost">08</p>
+      <div class="part-meta">
+        <span class="part-tag">Part 8</span>
+        <span class="part-line"></span>
+      </div>
+    </div>
+
+    <section class="sec reveal" id="f-decisions">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-list"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Part 8</p>
+          <h2 class="sec-title">Quick Decision Guide</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Which feature to reach for — and how it was applied in each preset.</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <caption class="sr-only">Quick decision guide: which Wavelet feature to reach for, and how it was applied on each device.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Situation</th>
+              <th scope="col">Feature to reach for</th>
+              <th scope="col">Redmi 12 Speaker</th>
+              <th scope="col">KZ EDX Pro</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Scientifically neutral starting point</td>
+              <td><strong><a href="#f-autoeq">AutoEq</a></strong></td>
+              <td class="v-redmi">N/A (no speaker database)</td>
+              <td class="v-kz">ON — sole correction layer</td>
+            </tr>
+            <tr>
+              <td>No database entry for your output device</td>
+              <td><strong><a href="#f-eq">Graphic Equalizer</a></strong></td>
+              <td class="v-redmi">ON — subtractive baseline</td>
+              <td class="v-kz">OFF (would double-correct AutoEq)</td>
+            </tr>
+            <tr>
+              <td>Tonal balance shifting oddly with volume</td>
+              <td><strong><a href="#f-loudness">Equal Loudness</a></strong></td>
+              <td class="v-redmi">Not used</td>
+              <td class="v-kz">OFF</td>
+            </tr>
+            <tr>
+              <td>Sound feels "in your Head," want space</td>
+              <td><strong><a href="#f-reverb">Reverberation</a></strong></td>
+              <td class="v-redmi">Not useful (real room already)</td>
+              <td class="v-kz">Not used</td>
+            </tr>
+            <tr>
+              <td>Stereo feels narrow</td>
+              <td><strong><a href="#f-virtualizer">Virtualizer</a></strong></td>
+              <td class="v-redmi">N/A (mono speaker)</td>
+              <td class="v-kz">Not used</td>
+            </tr>
+            <tr>
+              <td>One specific bass resonance to fix</td>
+              <td><strong><a href="#f-basstuner">Bass Tuner</a></strong></td>
+              <td class="v-redmi">Candidate, not yet isolated</td>
+              <td class="v-kz">OFF (was inert)</td>
+            </tr>
+            <tr>
+              <td>Worried your own EQ boosts will clip</td>
+              <td><strong><a href="#f-attenuator">Attenuator</a></strong></td>
+              <td class="v-redmi">OFF (EQ is net-negative)</td>
+              <td class="v-kz">OFF (nothing to compensate)</td>
+            </tr>
+            <tr>
+              <td>High-volume listening or hot-mastered genre</td>
+              <td><strong><a href="#f-limiterbp">Limiter</a></strong></td>
+              <td class="v-redmi">Optional — pick Standard or Dense tier</td>
+              <td class="v-kz">OFF (no physical risk)</td>
+            </tr>
+            <tr>
+              <td>One channel/ear louder than the other</td>
+              <td><strong><a href="#f-balance">Channel Balance</a></strong></td>
+              <td class="v-redmi">OFF (mono)</td>
+              <td class="v-kz">OFF (no mismatch)</td>
+            </tr>
+            <tr>
+              <td>Wavelet not affecting a specific app</td>
+              <td><strong><a href="#f-system">Legacy Mode → Enhanced Session Detection</a></strong></td>
+              <td class="v-redmi">Not needed</td>
+              <td class="v-kz">Not needed</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════════
+         APPENDIX — CURRENT REFERENCE PRESETS
+    ═════════════════════════════════════════════════════════════ -->
+    <div class="part reveal" aria-hidden="true">
+      <p class="part-ghost">A</p>
+      <div class="part-meta">
+        <span class="part-tag">Appendix</span>
+        <span class="part-line"></span>
+      </div>
+    </div>
+
+    <section class="sec reveal" id="f-appendix">
+      <header class="sec-head">
+        <span class="sec-icon"><svg class="ic"><use href="#i-doc"/></svg></span>
+        <div class="sec-heading">
+          <p class="sec-eyebrow">Appendix</p>
+          <h2 class="sec-title">Current Reference Presets</h2>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p>Starting points validated against the evidence gathered so far — not final answers. See <a href="#f-philosophy">Tuning Philosophy</a>.</p>
+      </div>
+
+      <div class="dump">
+        <header class="dump-head">
+          <span class="dump-title">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            Redmi 12 — Baseline
+          </span>
+          <button class="dump-copy" type="button" aria-label="Copy Redmi 12 baseline preset">
+            <svg class="ic"><use href="#i-copy"/></svg>
+            <span>Copy</span>
+          </button>
+        </header>
+        <pre>GRAPHIC EQUALIZER
+62.5Hz: -6dB
+125Hz: -4dB
+250Hz: -2dB
+500Hz: 0dB
+1kHz: 0dB
+2kHz: 0dB
+4kHz: -1dB
+8kHz: -3dB
+10kHz: -4dB
+
+ATTENUATOR
+Status: OFF
+
+LIMITER
+Status: OFF by default — enable only for high-volume listening or dense/hot-mastered genres.</pre>
+      </div>
+
+      <div class="dump">
+        <header class="dump-head">
+          <span class="dump-title">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            Redmi 12 — Limiter, Standard tier (typical, dynamically-mastered tracks)
+          </span>
+          <button class="dump-copy" type="button" aria-label="Copy Redmi 12 Standard limiter tier">
+            <svg class="ic"><use href="#i-copy"/></svg>
+            <span>Copy</span>
+          </button>
+        </header>
+        <pre>Attack: 1ms
+Release: 100ms
+Ratio: 10.0:1
+Threshold: -2dB
+Post-gain: 0dB</pre>
+      </div>
+
+      <div class="dump">
+        <header class="dump-head">
+          <span class="dump-title">
+            <svg class="ic"><use href="#i-phone"/></svg>
+            Redmi 12 — Limiter, Dense / Hot-Master tier (hard rock, metal, EDM)
+          </span>
+          <button class="dump-copy" type="button" aria-label="Copy Redmi 12 Dense limiter tier">
+            <svg class="ic"><use href="#i-copy"/></svg>
+            <span>Copy</span>
+          </button>
+        </header>
+        <pre>Attack: 4ms
+Release: 100ms (verify your device's live ceiling)
+Ratio: 5.0:1
+Threshold: -2dB
+Post-gain: 0dB</pre>
+      </div>
+
+      <div class="dump">
+        <header class="dump-head">
+          <span class="dump-title">
+            <svg class="ic"><use href="#i-headphones"/></svg>
+            KZ EDX Pro — Minimal Preset
+          </span>
+          <button class="dump-copy" type="button" aria-label="Copy KZ EDX Pro minimal preset">
+            <svg class="ic"><use href="#i-copy"/></svg>
+            <span>Copy</span>
+          </button>
+        </header>
+        <pre>AUTOEQ
+Status: ON
+Headphone model: KZ EDX Pro
+
+GRAPHIC EQUALIZER
+Status: OFF
+
+BASS TUNER
+Status: OFF
+
+LIMITER
+Status: OFF
+
+EQUAL LOUDNESS
+Status: OFF
+
+ATTENUATOR
+Status: OFF
+
+CHANNEL BALANCE
+Status: OFF</pre>
+      </div>
+    </section>
+
+    <!-- ── FOOTER ────────────────────────────────────────────────────── -->
+    <footer class="footer">
+      <div class="footer-brand">
+        <span class="brand-mark"><svg class="ic"><use href="#i-wave"/></svg></span>
+        <div>
+          <p class="footer-name">Wavelet Complete Feature Reference <span class="footer-ver">v2.0</span></p>
+          <p class="footer-line">Built from real presets: Redmi 12 Speaker & KZ EDX Pro</p>
+        </div>
+      </div>
+      <div class="footer-meta">
+        <p>Plain HTML · CSS · JS — no trackers, no build step, hosted on GitHub Pages</p>
+        <p>An independent reference — not affiliated with the Wavelet app or its developer.</p>
+      </div>
+    </footer>
+
+  </main>
+</div><!-- /.shell -->
+
+<!-- ── FLOATING UI ──────────────────────────────────────────────────── -->
+<button class="back-top" id="backTop" aria-label="Back to top">
+  <svg class="bt-ring" viewBox="0 0 44 44" aria-hidden="true">
+    <circle class="bt-track" cx="22" cy="22" r="19"/>
+    <circle class="bt-prog" id="btProg" cx="22" cy="22" r="19"/>
+  </svg>
+  <svg class="ic bt-arrow"><use href="#i-up"/></svg>
+</button>
+
+<div class="toast" id="toast" role="status" aria-live="polite">
+  <svg class="ic"><use href="#i-check"/></svg>
+  <span id="toastMsg">Copied to clipboard</span>
+</div>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
